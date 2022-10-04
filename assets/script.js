@@ -11,13 +11,13 @@ form.addEventListener('submit', e => {
 
     const listItems = list.querySelectorAll('.input-section .city');
     const listItemsArray = Array.from(listItems);
-
+// Logic for making sure that city is correctly entered
     if (listItemsArray.length > 0) {
         const filteredArray = listItemsArray.filter(el => {
             let content = "";
-            //athens,gr
+            
             if (inputVal.includes(",")) {
-                //athens,grrrrrr->invalid country code, so we keep only the first part of inputVal
+                
                 if (inputVal.split(",")[1].length > 2) {
                     inputVal = inputVal.split(",")[0];
                     content = el
@@ -27,7 +27,7 @@ form.addEventListener('submit', e => {
                     content = el.querySelector(".city-name").dataset.name.toLowerCase();
                 }
             } else {
-                //athens
+                
                 content = el.querySelector(".city-name span").textContent.toLowerCase();
             }
             return content == inputVal.toLowerCase();
@@ -35,13 +35,14 @@ form.addEventListener('submit', e => {
 
         if (filteredArray.length > 0) {
             msg.textContent = `You already know the weather for ${filteredArray[0].querySelector(".city-name span").textContent
-                } ...otherwise be more specific by providing the country code as well 😉`;
+                } ..otherwise be more specific by providing the country as well`;
             form.reset();
             input.focus();
             return;
         }
     }
 
+// Fetching the API Call
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=imperial`;
 
     fetch(url)
@@ -79,6 +80,7 @@ form.addEventListener('submit', e => {
     input.focus();
 });
 
+// code block for making the save button work to actually save the value field into local storage.
 $(document).ready(function () {
     $("#submitBtn").on("click", function () {
         var city = $(this).parent().attr("id");
@@ -86,4 +88,4 @@ $(document).ready(function () {
         localStorage.setItem(city, value);
     });
 });
-    // code block for making the save button work to actually save the value field into local storage.
+
