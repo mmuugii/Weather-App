@@ -42,7 +42,7 @@ form.addEventListener('submit', e => {
         }
     }
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=metric`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=imperial`;
 
     fetch(url)
         .then(response => response.json())
@@ -50,7 +50,6 @@ form.addEventListener('submit', e => {
             const { main, name, sys, weather } = data;
             const icon = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather[0]["icon"]
                 }.svg`;
-
             const li = document.createElement('li');
             li.classList.add('city');
             const markup = `
@@ -58,13 +57,17 @@ form.addEventListener('submit', e => {
                     <span>${name}</span>
                     <sup>${sys.country}</sup>
                 </h2>
-                <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
+                <div>Date: ${(new Date(data.dt).toLocaleDateString("en-US"))}</div>
+                <div class="city-temp">${Math.round(main.temp)}<sup> °F</sup></div>
+                <div>Humidity: ${Math.round(main.humidity)}<sup> °F</sup></div>
+                <div>Wind Speed: ${data.wind.speed}<sup> mph</sup></div>
                 <figure>
                     <img class="city-icon" src="${icon}" alt="${weather[0]["description"]
                 }">
                     <figcaption>${weather[0]["description"]}</figcaption>
                 </figure>
             `;
+            console.log(data);
             li.innerHTML = markup;
             list.appendChild(li);
         })
@@ -75,3 +78,12 @@ form.addEventListener('submit', e => {
     form.reset();
     input.focus();
 });
+
+$(document).ready(function () {
+    $("#submitBtn").on("click", function () {
+        var city = $(this).parent().attr("id");
+        var value = $(this).siblings(".cities").val();
+        localStorage.setItem(city, value);
+    });
+});
+    // code block for making the save button work to actually save the value field into local storage.
