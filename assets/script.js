@@ -1,3 +1,4 @@
+$(document).ready(function () {
 const form = document.querySelector('.upper-banner form');
 const input = document.querySelector('.upper-banner input');
 const msg = document.querySelector('.upper-banner .msg');
@@ -5,9 +6,13 @@ const list = document.querySelector('.input-section .cities');
 
 const apiKey = 'f5ae7c1a323bcf922d47c9c63d2ab9c8';
 
+let cities = [];
+
 form.addEventListener('submit', e => {
     e.preventDefault();
     const inputVal = input.value;
+    cities.push(inputVal);
+    localStorage.setItem("city", JSON.stringify(cities));
 
     const listItems = list.querySelectorAll('.input-section .city');
     const listItemsArray = Array.from(listItems);
@@ -58,7 +63,7 @@ form.addEventListener('submit', e => {
                     <span>${name}</span>
                     <sup>${sys.country}</sup>
                 </h2>
-                <div>Date: ${(new Date(data.dt).toLocaleDateString("en-US"))}</div>
+                <div>Date: ${(new Date(data.dt * 1000).toLocaleDateString("en-US"))}</div>
                 <div class="city-temp">${Math.round(main.temp)}<sup> °F</sup></div>
                 <div>Humidity: ${Math.round(main.humidity)}<sup> °F</sup></div>
                 <div>Wind Speed: ${data.wind.speed}<sup> mph</sup></div>
@@ -81,11 +86,10 @@ form.addEventListener('submit', e => {
 });
 
 // code block for making the save button work to actually save the value field into local storage.
-$(document).ready(function () {
-    $("#submitBtn").on("click", function () {
-        var city = $(this).parent().attr("id");
-        var value = $(this).siblings(".cities").val();
-        localStorage.setItem(city, value);
-    });
+    // $("#submitBtn").on("click", function () {
+    //     var city = inputVal;
+    //     var value = $(this).siblings(".cities").val();
+    //     localStorage.setItem(city, value);
+    // });
 });
 
